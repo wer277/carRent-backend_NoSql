@@ -4,11 +4,13 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module'; 
 import { ConfigModule } from '@nestjs/config';
+import { RentalCompanyModule } from './rental-company/rental-company.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/carRentManager'),
     AuthModule,
+    RentalCompanyModule,
     ConfigModule.forRoot({
         isGlobal: true,
       }),

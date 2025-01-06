@@ -1,7 +1,7 @@
-import {Controller, Post, Body, Patch, Param, UseGuards, Req, Get, ForbiddenException} from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, UseGuards, Req, Get, ForbiddenException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateClientDto } from './dto/create-client.dto';
 import { Roles } from './roles.decorator';
 import { RolesGuard } from './roles.guard';
 import { LoginDto } from './dto/login.dto';
@@ -14,7 +14,7 @@ export class AuthController {
 
     // Rejestracja nowego klienta (publiczna)
     @Post('register')
-    async register(@Body() createUserDto: CreateUserDto) {
+    async register(@Body() createUserDto: CreateClientDto) {
         return this.authService.register(createUserDto);
     }
 
