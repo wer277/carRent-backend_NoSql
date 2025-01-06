@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateClientDto {
+export class CreateEmployeeDto {
     @IsEmail()
     @IsNotEmpty()
     email: string;
@@ -9,5 +9,13 @@ export class CreateClientDto {
     @IsNotEmpty()
     password: string;
 
-    role: string = 'client';
+    @IsString()
+    @IsNotEmpty()
+    name: string;
+
+    @IsString()
+    @IsNotEmpty()
+    surname: string;
+
+    role: string = 'employee';
 }
