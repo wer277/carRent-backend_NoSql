@@ -2,11 +2,9 @@ import { Injectable, BadRequestException, ForbiddenException } from '@nestjs/com
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
-import { CreateAdminDto } from './dto/create-admin.dto';
-import { CreateEmployeeDto } from './dto/create-employee.dto';
+import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -33,56 +31,6 @@ export class AuthService {
             access_token: accessToken,
             isProfileComplete,
         };
-    }
-
-    // Tworzenie administratora wypożyczalni przez administratora platformy
-    async createRentalAdmin(createRentalAdminDto: CreateAdminDto, currentUser: User): Promise<User> {
-        if (currentUser.role !== 'platform_admin') {
-            throw new ForbiddenException('Only platform admins can create rental admins');
-        }
-
-        const { email, password, name, surname } = createRentalAdminDto;
-
-        const existingUser = await this.userModel.findOne({ email });
-        if (existingUser) {
-            throw new BadRequestException('Email already exists');
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const rentalAdmin = new this.userModel({
-            email,
-            password: hashedPassword,
-            name,
-            surname,
-            role: 'rental_admin',
-        });
-
-        return rentalAdmin.save();
-    }
-
-    // Tworzenie pracownika przez administratora wypożyczalni
-    async createEmployee(createEmployeeDto: CreateEmployeeDto, currentUser: User): Promise<User> {
-        if (currentUser.role !== 'rental_admin') {
-            throw new ForbiddenException('Only rental admins can create employees');
-        }
-
-        const { email, password, name, surname } = createEmployeeDto;
-
-        const existingUser = await this.userModel.findOne({ email });
-        if (existingUser) {
-            throw new BadRequestException('Email already exists');
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const employee = new this.userModel({
-            email,
-            password: hashedPassword,
-            name,
-            surname,
-            role: 'employee',
-        });
-
-        return employee.save();
     }
 
     // Walidacja użytkownika
