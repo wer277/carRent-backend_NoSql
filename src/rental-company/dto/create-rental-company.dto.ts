@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-export type RentalCompanyDocument = RentalCompany & Document;
+export type RentalCompanyDocument = RentalCompanyDto & Document;
 
 @Schema()
-export class RentalCompany {
+export class RentalCompanyDto {
     @Prop({ required: true })
     name: string;
 
@@ -27,4 +27,4 @@ export class RentalCompany {
     createdBy: string; // ID rental admina, który stworzył wypożyczalnię
 }
 
-export const RentalCompanySchema = SchemaFactory.createForClass(RentalCompany);
+export const RentalCompanySchema = SchemaFactory.createForClass(RentalCompanyDto);

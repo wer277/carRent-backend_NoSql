@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { RentalCompanyModule } from './rental-company/rental-company.module';
 import { ClientModule } from './client/client.module';
 import { EmployeeModule } from './employee/employee.module';
+import { VehicleModule } from './vehicle/vehicle.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { EmployeeModule } from './employee/employee.module';
     RentalCompanyModule,
     ClientModule,
     EmployeeModule,
+    VehicleModule,
     ConfigModule.forRoot({
         isGlobal: true,
       }),

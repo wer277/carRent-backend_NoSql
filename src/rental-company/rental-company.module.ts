@@ -1,15 +1,18 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { RentalCompanyController } from './rental-company.controller';
 import { RentalCompanyService } from './rental-company.service';
-import { RentalCompanyRepository } from './rental-company.repository';
+import { RentalCompanyController } from './rental-company.controller';
 import { RentalCompany, RentalCompanySchema } from './schemas/rental-company.schema';
+import { User, UserSchema } from '../auth/schemas/user.schema';
 
 @Module({
     imports: [
-        MongooseModule.forFeature([{ name: RentalCompany.name, schema: RentalCompanySchema }]),
+        MongooseModule.forFeature([
+            { name: RentalCompany.name, schema: RentalCompanySchema },
+            { name: User.name, schema: UserSchema },
+        ]),
     ],
     controllers: [RentalCompanyController],
-    providers: [RentalCompanyService, RentalCompanyRepository],
+    providers: [RentalCompanyService],
 })
 export class RentalCompanyModule { }
