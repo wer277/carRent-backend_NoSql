@@ -7,7 +7,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { config } from 'process';
+import { EmployeeModule } from '../employee/employee.module';
+import { RentalAdminModule } from '../rental-admin/rental-admin.module';
 
 @Module({
     imports: [
@@ -21,6 +22,8 @@ import { config } from 'process';
                 signOptions: { expiresIn: '1h' },
             }),
         }),
+        RentalAdminModule,
+        EmployeeModule,
     ],
     providers: [AuthService, JwtStrategy],
     controllers: [AuthController],
