@@ -22,7 +22,7 @@ export class AuthService {
             throw new BadRequestException('Invalid email or password');
         }
 
-        const payload = { email: user.email, sub: user._id, role: user.role };
+        const payload = { email: user.email, sub: user._id, role: user.role, rentalCompanyIds: user.rentalCompanyIds };
         const accessToken = this.jwtService.sign(payload);
 
         const isProfileComplete = user.role === 'client' ? user.isProfileComplete : null;

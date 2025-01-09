@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Get, UseGuards, Req } from '@nestjs/common';
 import { VehicleService } from './vehicle.service';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
@@ -7,25 +7,29 @@ import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 
 @Controller('vehicles')
-@UseGuards(AuthGuard('jwt'), RolesGuard) // Dodaj Guard JWT i RolesGuard
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 export class VehicleController {
     constructor(private readonly vehicleService: VehicleService) { }
 
-    @Post()
-    @Roles('employee') // Dostęp tylko dla pracowników
-    async createVehicle(@Body() createVehicleDto: CreateVehicleDto) {
-        return this.vehicleService.createVehicle(createVehicleDto);
+    @Post('create-vehicle')
+    @Roles('employee') // Tylko pracownik może tworzyć pojazdy
+    async createVehicle(@Body() createVehicleDto: CreateVehicleDto, @Req() req) {
+        console.log(req.user)
+        const userRentalCompanyIds = req.user.rentalCompanyIds;
+        return this.vehicleService.createVehicle(createVehicleDto, userRentalCompanyIds);
     }
 
     @Patch(':id')
-    @Roles('employee') // Dostęp tylko dla pracowników
-    async updateVehicle(@Param('id') vehicleId: string, @Body() updateVehicleDto: UpdateVehicleDto) {
-        return this.vehicleService.updateVehicle(vehicleId, updateVehicleDto);
+    @Roles('employee') // Tylko pracownik może aktualizować pojazdy
+    async updateVehicle(@Param('id') vehicleId: string, @Body() updateVehicleDto: UpdateVehicleDto, @Req() req) {
+        const userRentalCompanyIds = req.user.rentalCompanyIds;
+        return this.vehicleService.updateVehicle(vehicleId, updateVehicleDto, userRentalCompanyIds);
     }
 
-    @Get()
-    @Roles('employee') // Dostęp tylko dla pracowników
-    async getAllVehicles(@Query('rentalCompanyId') rentalCompanyId: string) {
-        return this.vehicleService.getAllVehicles(rentalCompanyId);
+    @Get('all-vehicles')
+    @Roles('employee') // Tylko pracownik może przeglądać pojazdy
+    async getAllVehicles(@Req() req) {
+        const userRentalCompanyIds = req.user.rentalCompanyIds;
+        return this.vehicleService.getAllVehicles(userRentalCompanyIds);
     }
 }
