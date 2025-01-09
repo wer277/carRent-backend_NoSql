@@ -31,11 +31,14 @@ export class AuthController {
         return this.rentalAdminService.createRentalAdmin(createRentalAdminDto, req.user);
     }
 
-    // Tworzenie pracownika przez administratora wypożyczalni
     @Post('create-employee')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles('rental_admin') // Dostęp tylko dla administratora wypożyczalni
+    @Roles('rental_admin') // Tylko rental admin może tworzyć pracowników
     async createEmployee(@Body() createEmployeeDto: CreateEmployeeDto, @Req() req) {
-        return this.employeeService.createEmployee(createEmployeeDto, req.user);
+        console.log('Decoded user:', req.user); // Log użytkownika
+        const rentalAdminId = req.user.userId; // ID rental admina z tokena JWT
+
+        return this.employeeService.createEmployee(createEmployeeDto, rentalAdminId);
     }
 }
+
