@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req, Get } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { Roles } from './roles.decorator';
@@ -39,6 +39,13 @@ export class AuthController {
         const rentalAdminId = req.user.userId; // ID rental admina z tokena JWT
 
         return this.employeeService.createEmployee(createEmployeeDto, rentalAdminId);
+    }
+
+    @Get('rental-admins')
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Roles('platform_admin') // Tylko platform admin może wyświetlać listę rental_adminów
+    async getAllRentalAdmins() {
+        return this.authService.getAllRentalAdmins();
     }
 }
 

@@ -29,6 +29,7 @@ export class AuthService {
 
         return {
             access_token: accessToken,
+            role: user.role,
             isProfileComplete,
         };
     }
@@ -40,5 +41,9 @@ export class AuthService {
             return user;
         }
         return null;
+    }
+
+    async getAllRentalAdmins(): Promise<User[]> {
+        return this.userModel.find({ role: 'rental_admin' }, '-password').exec(); // Wyklucz hasło z wyników
     }
 }
