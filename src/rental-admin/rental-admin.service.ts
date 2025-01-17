@@ -40,19 +40,16 @@ export class RentalAdminService {
     }
 
     async updateRentalAdmin(id: string, updateAdminDto: UpdateAdminDto, user: User): Promise<User> {
-        // Znajdź użytkownika do edycji
         const admin = await this.userModel.findById(id);
 
         if (!admin || admin.role !== 'rental_admin') {
             throw new NotFoundException('Rental admin not found');
         }
 
-        // Walidacja, czy użytkownik ma prawo do edycji
         if (user.role !== 'platform_admin') {
             throw new ForbiddenException('Only platform admins can edit rental admins');
         }
 
-        // Sprawdź, czy email jest unikalny
         if (updateAdminDto.email) {
             const emailExists = await this.userModel.findOne({ email: updateAdminDto.email });
             if (emailExists && emailExists.id !== id) {
@@ -60,8 +57,18 @@ export class RentalAdminService {
             }
         }
 
-        // Zaktualizuj dane użytkownika
-        Object.assign(admin, updateAdminDto);
+        // Sprawdzenie i aktualizacja hasła, jeśli zostało dostarczone
+        if (updateAdminDto.password) {
+            const hashedPassword = await bcrypt.hash(updateAdminDto.password, 10);
+            admin.password = hashedPassword;
+        }
+
+        // Aktualizacja pozostałych pól (bez password, które już obsłużono)
+        const { email, name, surname } = updateAdminDto;
+        if (email !== undefined) admin.email = email;
+        if (name !== undefined) admin.name = name;
+        if (surname !== undefined) admin.surname = surname;
+
         return admin.save();
     }
 

@@ -9,6 +9,7 @@ import { ClientModule } from './client/client.module';
 import { EmployeeModule } from './employee/employee.module';
 import { VehicleModule } from './vehicle/vehicle.module';
 import { RentalAdminModule } from './rental-admin/rental-admin.module';
+import { PlatformAdminModule } from './platform_admin/platform_admin.module';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/carRentManager'),
@@ -18,6 +19,7 @@ import { RentalAdminModule } from './rental-admin/rental-admin.module';
     EmployeeModule,
     VehicleModule,
     RentalAdminModule,
+    PlatformAdminModule,
     ConfigModule.forRoot({
         isGlobal: true,
       }),
