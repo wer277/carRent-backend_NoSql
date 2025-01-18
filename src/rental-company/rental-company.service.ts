@@ -42,4 +42,20 @@ export class RentalCompanyService {
     async getRentalCompaniesByAdmin(rentalAdminId: string): Promise<RentalCompany[]> {
         return this.rentalCompanyModel.find({ createdBy: rentalAdminId }).exec();
     }
+
+    async deleteRentalCompany(id: string, rentalAdminId: string): Promise<void> {
+        const rentalCompany = await this.rentalCompanyModel.findById(id);
+
+        if (!rentalCompany) {
+            throw new NotFoundException('Rental company not found');
+        }
+
+        // Sprawdzenie, czy rental admin ma uprawnienia do usunięcia
+        if (rentalCompany.createdBy !== rentalAdminId) {
+            throw new ForbiddenException('You are not authorized to delete this rental company');
+        }
+
+        await this.rentalCompanyModel.deleteOne({ _id: id });
+    }
+
 }

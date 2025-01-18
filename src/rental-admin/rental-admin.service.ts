@@ -97,5 +97,38 @@ export class RentalAdminService {
         return rentalAdmins;
     }
 
+    // Pobieranie danych zalogowanego rental_admin
+    async getCurrentRentalAdmin(userId: string): Promise<User> {
+        const admin = await this.userModel.findOne({ _id: userId, role: 'rental_admin' });
+        if (!admin) {
+            throw new NotFoundException('Rental admin not found');
+        }
+        return admin;
+    }
+
+    // Edycja danych rental_admin
+    async updateAdmin(userId: string, updateAdminDto: UpdateAdminDto): Promise<User> {
+        const admin = await this.userModel.findOne({ _id: userId, role: 'rental_admin' });
+        if (!admin) {
+            throw new NotFoundException('Rental admin not found');
+        }
+
+        if (updateAdminDto.email) {
+            const emailExists = await this.userModel.findOne({
+                email: updateAdminDto.email,
+                _id: { $ne: userId },
+            });
+            if (emailExists) {
+                throw new BadRequestException('Email already in use');
+            }
+        }
+
+        // Aktualizacja danych
+        admin.name = updateAdminDto.name || admin.name;
+        admin.surname = updateAdminDto.surname || admin.surname;
+        admin.email = updateAdminDto.email || admin.email;
+
+        return admin.save();
+    }
 }
 

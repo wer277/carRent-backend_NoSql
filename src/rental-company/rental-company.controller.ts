@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Req, Patch, Param, Get } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req, Patch, Param, Get, Delete } from '@nestjs/common';
 import { RentalCompanyService } from './rental-company.service';
 import { RentalCompanyDto } from './dto/create-rental-company.dto';
 import { UpdateRentalCompanyDto } from './dto/update-rental-company.dto';
@@ -34,4 +34,12 @@ export class RentalCompanyController {
         const rentalAdminId = req.user.userId; // ID rental admina z tokena JWT
         return this.rentalCompanyService.getRentalCompaniesByAdmin(rentalAdminId);
     }
+
+    @Delete(':id')
+    @Roles('rental_admin') // Tylko rental admin może usuwać wypożyczalnie
+    async deleteRentalCompany(@Param('id') id: string, @Req() req) {
+        const rentalAdminId = req.user.userId; // ID rental admina z tokena JWT
+        return this.rentalCompanyService.deleteRentalCompany(id, rentalAdminId);
+    }
+
 }

@@ -27,4 +27,27 @@ export class RentalAdminController {
     async deleteRentalAdmin(@Param('id') id: string, @Req() req) {
         return this.rentalAdminService.deleteRentalAdmin(id, req.user);
     }
+
+    // Pobranie danych zalogowanego rental_admin
+    @Get('profile')
+    @Roles('rental_admin')
+    async getCurrentRentalAdmin(@Req() req) {
+        const userId = req.user.userId;
+        const admin = await this.rentalAdminService.getCurrentRentalAdmin(userId);
+        if (!admin) {
+            throw new NotFoundException('Rental admin not found');
+        }
+        return admin;
+    }
+
+    // Edycja danych zalogowanego rental_admin
+    @Put('profile')
+    @Roles('rental_admin')
+    async updateRentalAdminProfile(
+        @Req() req,
+        @Body() updateAdminDto: UpdateAdminDto,
+    ) {
+        const userId = req.user.userId;
+        return this.rentalAdminService.updateAdmin(userId, updateAdminDto);
+    }
 }
