@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type VehicleDocument = Vehicle & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Vehicle {
     @Prop({ required: true })
     brand: string;
@@ -12,19 +12,26 @@ export class Vehicle {
     model: string;
 
     @Prop({ required: true })
-    licensePlate: string;
+    productionYear: number;
 
     @Prop({ required: true })
-    rentalCompanyId: string; // Id wypożyczalni, do której należy pojazd
+    location: string;
 
-    @Prop({ default: 'available' }) // Status pojazdu: dostępny, wynajęty, w serwisie
+    @Prop({ required: true })
+    dailyPrice: number;
+
+    @Prop({ required: true, enum: ['Zarezerwowany', 'Dostępny', 'W naprawie'], default: 'Dostępny' })
     status: string;
 
-    @Prop({ default: Date.now })
-    createdAt: Date;
+    @Prop({ required: true })
+    rentalCompanyId: string;
 
-    @Prop({ default: null })
-    updatedAt: Date;
+    @Prop()
+    createdAt?: Date;
+
+    @Prop()
+    updatedAt?: Date;
 }
+
 
 export const VehicleSchema = SchemaFactory.createForClass(Vehicle);

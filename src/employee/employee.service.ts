@@ -16,18 +16,22 @@ export class EmployeeService {
     ) { }
 
     async createEmployee(createEmployeeDto: CreateEmployeeDto, rentalAdminId: string): Promise<User> {
-        const { email, password, name, surname, rentalCompanyId } = createEmployeeDto;
-        const rentalCompany = await this.rentalCompanyModel.findById(rentalCompanyId);
+        const { email, password, name, surname, rentalCompanyIds } = createEmployeeDto;
+
+        // Używamy pierwszej wypożyczalni z tablicy
+        const rentalCompany = await this.rentalCompanyModel.findById(rentalCompanyIds[0]);
         if (!rentalCompany) {
             throw new BadRequestException('Rental company does not exist');
         }
         if (rentalCompany.createdBy.toString() !== rentalAdminId) {
             throw new ForbiddenException('You are not authorized to create employees for this rental company');
         }
+
         const existingUser = await this.userModel.findOne({ email });
         if (existingUser) {
             throw new BadRequestException('Email already exists');
         }
+
         const hashedPassword = await bcrypt.hash(password, 10);
         const newEmployee = new this.userModel({
             email,
@@ -35,10 +39,12 @@ export class EmployeeService {
             name,
             surname,
             role: 'employee',
-            rentalCompanyIds: [rentalCompanyId],
+            rentalCompanyIds: rentalCompanyIds, // Przypisanie całej tablicy
         });
         return newEmployee.save();
     }
+
+
 
     async updateEmployee(id: string, updateEmployeeDto: UpdateEmployeeDto, rentalAdminId: string): Promise<User> {
         const employee = await this.userModel.findById(id);

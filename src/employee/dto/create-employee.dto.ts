@@ -19,5 +19,5 @@ export class CreateEmployeeDto {
 
     @IsString()
     @IsNotEmpty()
-    rentalCompanyId: string; // Identyfikator wypożyczalni, do której przypisany jest pracownik
+    rentalCompanyIds: string[]; // Identyfikator wypożyczalni, do której przypisany jest pracownik
 }

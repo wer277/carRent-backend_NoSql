@@ -1,4 +1,4 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsNumber } from 'class-validator';
 
 export class UpdateVehicleDto {
     @IsString()
@@ -9,9 +9,17 @@ export class UpdateVehicleDto {
     @IsOptional()
     model?: string;
 
+    @IsNumber()
+    @IsOptional()
+    productionYear?: number;
+
     @IsString()
     @IsOptional()
-    licensePlate?: string;
+    location?: string;
+
+    @IsNumber()
+    @IsOptional()
+    dailyPrice?: number;
 
     @IsString()
     @IsOptional()

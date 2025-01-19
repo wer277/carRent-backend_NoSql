@@ -10,18 +10,15 @@ export class VehicleService {
     constructor(@InjectModel(Vehicle.name) private readonly vehicleModel: Model<VehicleDocument>) { }
 
     // Tworzenie pojazdu
-    async createVehicle(createVehicleDto: CreateVehicleDto, userRentalCompanyIds: string[]): Promise<Vehicle> {
-        const { rentalCompanyId } = createVehicleDto;
-
-        // Sprawdź, czy użytkownik ma dostęp do danej wypożyczalni
-        if (!userRentalCompanyIds.includes(rentalCompanyId)) {
-            throw new ForbiddenException('You do not have access to this rental company');
-        }
-
+    async createVehicle(createVehicleDto: CreateVehicleDto): Promise<Vehicle> {
         const newVehicle = new this.vehicleModel(createVehicleDto);
         return newVehicle.save();
     }
 
+
+
+
+    // Aktualizacja pojazdu
     // Aktualizacja pojazdu
     async updateVehicle(
         vehicleId: string,
@@ -33,18 +30,46 @@ export class VehicleService {
             throw new NotFoundException('Vehicle not found');
         }
 
-        // Sprawdź, czy pojazd należy do wypożyczalni użytkownika
         if (!userRentalCompanyIds.includes(vehicle.rentalCompanyId.toString())) {
             throw new ForbiddenException('You do not have access to this vehicle');
         }
 
         Object.assign(vehicle, updateVehicleDto);
-        vehicle.updatedAt = new Date(); // Aktualizacja znacznika czasu
+        vehicle.set('updatedAt', new Date());  // Ustawienie pola `updatedAt` poprawnym sposobem
         return vehicle.save();
     }
+
 
     // Pobieranie wszystkich pojazdów dla wypożyczalni
     async getAllVehicles(userRentalCompanyIds: string[]): Promise<Vehicle[]> {
         return this.vehicleModel.find({ rentalCompanyId: { $in: userRentalCompanyIds } }).exec();
+    }
+
+    // Pobranie pojazdu po ID
+    async getVehicleById(vehicleId: string, userRentalCompanyIds: string[]): Promise<Vehicle> {
+        const vehicle = await this.vehicleModel.findById(vehicleId);
+        if (!vehicle) {
+            throw new NotFoundException('Vehicle not found');
+        }
+
+        if (!userRentalCompanyIds.includes(vehicle.rentalCompanyId.toString())) {
+            throw new ForbiddenException('You do not have access to this vehicle');
+        }
+
+        return vehicle;
+    }
+
+    // Usuwanie pojazdu
+    async deleteVehicle(vehicleId: string, userRentalCompanyIds: string[]): Promise<void> {
+        const vehicle = await this.vehicleModel.findById(vehicleId);
+        if (!vehicle) {
+            throw new NotFoundException('Vehicle not found');
+        }
+
+        if (!userRentalCompanyIds.includes(vehicle.rentalCompanyId.toString())) {
+            throw new ForbiddenException('You do not have access to this vehicle');
+        }
+
+        await this.vehicleModel.findByIdAndDelete(vehicleId);
     }
 }
