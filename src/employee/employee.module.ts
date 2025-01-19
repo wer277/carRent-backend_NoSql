@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { EmployeeService } from './employee.service';
 import { User, UserSchema } from '../auth/schemas/user.schema';
 import { RentalCompany, RentalCompanySchema } from '../rental-company/schemas/rental-company.schema';
-
+import { EmployeeController } from './employee.contoller';
 @Module({
     imports: [
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }
@@ -11,6 +11,7 @@ import { RentalCompany, RentalCompanySchema } from '../rental-company/schemas/re
         ]),
     ],
     providers: [EmployeeService],
+    controllers: [EmployeeController],
     exports: [EmployeeService],
 })
 export class EmployeeModule { }
