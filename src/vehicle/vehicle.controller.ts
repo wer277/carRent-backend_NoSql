@@ -15,14 +15,20 @@ export class VehicleController {
     @Post('create')
     @Roles('employee')
     async createVehicle(@Body() createVehicleDto: CreateVehicleDto, @Req() req) {
-        const rentalCompanyId = req.user.rentalCompanyId; // Pobranie ID z zalogowanego użytkownika
+        const rentalCompanyIds = req.user.rentalCompanyIds;
+        const rentalCompanyId = Array.isArray(rentalCompanyIds) && rentalCompanyIds.length > 0
+            ? rentalCompanyIds[0]
+            : null;
+
+        if (!rentalCompanyId) {
+            throw new BadRequestException('No rental company ID associated with user.');
+        }
+
         return this.vehicleService.createVehicle({
             ...createVehicleDto,
             rentalCompanyId,
         });
     }
-
-
 
 
     @Patch('update/:id')

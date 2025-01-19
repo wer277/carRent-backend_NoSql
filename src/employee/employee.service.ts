@@ -105,4 +105,36 @@ export class EmployeeService {
         }
         return this.userModel.find({ role: 'employee', rentalCompanyIds: rentalCompanyId }).exec();
     }
+
+    async getEmployeeProfile(employeeId: string) {
+        const employee = await this.userModel.findById(employeeId).select('-password');
+        if (!employee) {
+            throw new NotFoundException('Employee not found');
+        }
+        return {
+            _id: employee._id.toString(),
+            firstName: employee.name,
+            lastName: employee.surname,
+            email: employee.email,
+        };
+    }
+
+    async updateEmployeeProfile(employeeId: string, updateEmployeeDto: UpdateEmployeeDto) {
+        const updatedEmployee = await this.userModel.findByIdAndUpdate(
+            employeeId,
+            {
+                name: updateEmployeeDto.name,
+                surname: updateEmployeeDto.surname,
+                email: updateEmployeeDto.email,
+            },
+            { new: true } // Upewnij się, że zwracamy zaktualizowany dokument
+        ).select('-password');
+
+        if (!updatedEmployee) {
+            throw new NotFoundException('Employee not found');
+        }
+
+        return updatedEmployee.toObject(); // Zamień na czysty obiekt JSON
+    }
+
 }

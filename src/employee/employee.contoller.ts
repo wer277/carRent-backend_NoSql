@@ -1,5 +1,5 @@
 // employee.controller.ts
-import { Controller, Post, Body, UseGuards, Req, Patch, Param, Delete, Get } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req, Patch, Param, Delete, Get, NotFoundException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
@@ -37,5 +37,19 @@ export class EmployeeController {
     async getEmployeesByRentalCompany(@Param('rentalCompanyId') rentalCompanyId: string, @Req() req) {
         const rentalAdminId = req.user.userId;
         return this.employeeService.getEmployeesByRentalCompany(rentalCompanyId, rentalAdminId);
+    }
+
+    @Get('profile')
+    @UseGuards(AuthGuard('jwt'))
+    async getProfile(@Req() req) {
+        const employeeId = req.user.userId;
+        return this.employeeService.getEmployeeProfile(employeeId);
+    }
+
+    @Patch('update-profile')
+    @UseGuards(AuthGuard('jwt'))
+    async updateProfile(@Req() req, @Body() updateEmployeeDto: UpdateEmployeeDto) {
+        const employeeId = req.user.userId;
+        return this.employeeService.updateEmployeeProfile(employeeId, updateEmployeeDto);
     }
 }

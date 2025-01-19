@@ -23,5 +23,5 @@ export class CreateVehicleDto {
 
     @IsString()
     @IsNotEmpty()
-    rentalCompanyId: string;
+    rentalCompanyId: string ;
 }
