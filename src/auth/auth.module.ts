@@ -7,15 +7,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { EmployeeModule } from '../employee/employee.module';
 import { RentalAdminModule } from '../rental-admin/rental-admin.module';
+import { EmployeeModule } from '../employee/employee.module';
 
 @Module({
     imports: [
         MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
         PassportModule,
         JwtModule.registerAsync({
-            imports: [ConfigModule],
+            imports: [ConfigModule.forRoot()],
             inject: [ConfigService],
             useFactory: (configService: ConfigService) => ({
                 secret: configService.get<string>('JWT_SECRET'),
