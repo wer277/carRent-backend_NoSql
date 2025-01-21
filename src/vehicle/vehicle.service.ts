@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Vehicle, VehicleDocument } from './schemas/vehicle.schema';
@@ -15,10 +15,6 @@ export class VehicleService {
         return newVehicle.save();
     }
 
-
-
-
-    // Aktualizacja pojazdu
     // Aktualizacja pojazdu
     async updateVehicle(
         vehicleId: string,
@@ -71,5 +67,9 @@ export class VehicleService {
         }
 
         await this.vehicleModel.findByIdAndDelete(vehicleId);
+    }
+
+    async getAllVehiclesForClients() {
+        return this.vehicleModel.find().exec();
     }
 }

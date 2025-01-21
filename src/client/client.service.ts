@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, ForbiddenException } from '@nestjs/common';
+import { Injectable, BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../auth/schemas/user.schema';
@@ -47,5 +47,34 @@ export class ClientService {
         client.isProfileComplete = true;
 
         return client.save();
+    }
+
+    // Pobranie profilu klienta
+    async getClientProfile(userId: string): Promise<User> {
+        const client = await this.userModel.findById(userId).select('-password');
+
+        if (!client) {
+            throw new BadRequestException('Client not found');
+        }
+
+        return client;
+    }
+
+    async updateProfile(userId: string, updateData: any): Promise<User> {
+        const user = await this.userModel.findById(userId);
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+        // Aktualizujemy pola profilu na podstawie updateData
+        user.name = updateData.name;
+        user.surname = updateData.surname;
+        user.phoneNumber = updateData.phoneNumber;
+        user.city = updateData.city;
+        user.street = updateData.street;
+        user.houseNumber = updateData.houseNumber;
+        user.postalCode = updateData.postalCode;
+        // Ustawiamy flagę profilu kompletnego
+        user.isProfileComplete = true;
+        return user.save();
     }
 }

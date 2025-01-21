@@ -20,7 +20,7 @@ export class Vehicle {
     @Prop({ required: true })
     dailyPrice: number;
 
-    @Prop({ required: true, enum: ['Zarezerwowany', 'Dostępny', 'W naprawie'], default: 'Dostępny' })
+    @Prop({ required: true, enum: ['Zarezerwowany', 'Dostępny', 'W naprawie', 'Anulowany'], default: 'Dostępny' })
     status: string;
 
     @Prop({ required: true })
@@ -31,6 +31,9 @@ export class Vehicle {
 
     @Prop()
     updatedAt?: Date;
+
+    @Prop({ default: null })
+    reservedBy: string | null;
 }
 
 

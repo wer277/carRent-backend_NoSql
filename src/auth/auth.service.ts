@@ -17,20 +17,30 @@ export class AuthService {
     async login(loginUserDto: LoginDto) {
         const { email, password } = loginUserDto;
 
-        const user = await this.validateUser(email, password);
+        const user = await this.userModel.findOne({ email });
+
         if (!user) {
             throw new BadRequestException('Invalid email or password');
         }
 
-        const payload = { email: user.email, sub: user._id, role: user.role, rentalCompanyIds: user.rentalCompanyIds };
-        const accessToken = this.jwtService.sign(payload);
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
+            throw new BadRequestException('Invalid email or password');
+        }
 
-        const isProfileComplete = user.role === 'client' ? user.isProfileComplete : null;
+        const payload = {
+            email: user.email,
+            sub: user._id.toString(),
+            role: user.role,
+            rentalCompanyIds: user.rentalCompanyIds || [],
+        };
+
+        const accessToken = this.jwtService.sign(payload);
 
         return {
             access_token: accessToken,
             role: user.role,
-            isProfileComplete,
+            isProfileComplete: user.role === 'client' ? user.isProfileComplete : true,
         };
     }
 

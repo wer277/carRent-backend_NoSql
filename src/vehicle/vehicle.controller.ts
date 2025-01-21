@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, Get, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Get, Delete, UseGuards, Req, Request, ForbiddenException } from '@nestjs/common';
 import { VehicleService } from './vehicle.service';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
@@ -11,6 +11,15 @@ import { BadRequestException } from '@nestjs/common';
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 export class VehicleController {
     constructor(private readonly vehicleService: VehicleService) { }
+
+    @Get('all')
+    @Roles('client')
+    async getAllVehiclesForClients(@Request() req) {
+        console.log('User in request:', req.user);
+        return this.vehicleService.getAllVehiclesForClients();
+    }
+
+
 
     @Post('create')
     @Roles('employee')

@@ -6,15 +6,22 @@ export class RolesGuard implements CanActivate {
     constructor(private readonly reflector: Reflector) { }
 
     canActivate(context: ExecutionContext): boolean {
-        const roles = this.reflector.get<string[]>('roles', context.getHandler());
+        const roles = this.reflector.getAllAndOverride<string[]>('roles', [
+            context.getHandler(),
+            context.getClass(),
+        ]);
+        console.log('RolesGuard: Required roles:', roles);  // Logowanie metadanych ról
+
         if (!roles) {
             return true;
         }
 
         const request = context.switchToHttp().getRequest();
         const user = request.user;
+        console.log('RolesGuard: User:', user);
 
-        if (!roles.includes(user.role)) {
+        if (!user || !user.role || !roles.includes(user.role)) {
+            console.log(`RolesGuard: Forbidden - User role: ${user?.role}`);
             throw new ForbiddenException('You do not have access to this resource');
         }
 
