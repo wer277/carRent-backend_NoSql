@@ -15,7 +15,7 @@ export class RentalCompanyRepository {
     }
 
     async findById(id: string): Promise<RentalCompany | null> {
-        return this.rentalCompanyModel.findById(id).exec(); // Użyj modelu Mongoose
+        return this.rentalCompanyModel.findById(id).exec(); 
     }
 
     async update(id: string, updateData: Partial<RentalCompany>): Promise<RentalCompany> {

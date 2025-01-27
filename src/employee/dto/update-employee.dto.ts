@@ -19,5 +19,5 @@ export class UpdateEmployeeDto {
 
     @IsString()
     @IsOptional()
-    rentalCompanyId?: string; // Aktualizacja przypisania do innej wypożyczalni (opcjonalne)
+    rentalCompanyId?: string; 
 }

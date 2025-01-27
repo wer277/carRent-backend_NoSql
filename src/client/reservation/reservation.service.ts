@@ -26,7 +26,6 @@ export class ReservationService {
             throw new BadRequestException('Vehicle is already reserved');
         }
 
-        // Aktualizacja statusu pojazdu
         vehicle.status = 'Zarezerwowany';
         vehicle.reservedBy = clientId;
         await vehicle.save();

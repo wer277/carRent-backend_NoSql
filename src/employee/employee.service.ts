@@ -18,7 +18,6 @@ export class EmployeeService {
     async createEmployee(createEmployeeDto: CreateEmployeeDto, rentalAdminId: string): Promise<User> {
         const { email, password, name, surname, rentalCompanyIds } = createEmployeeDto;
 
-        // Używamy pierwszej wypożyczalni z tablicy
         const rentalCompany = await this.rentalCompanyModel.findById(rentalCompanyIds[0]);
         if (!rentalCompany) {
             throw new BadRequestException('Rental company does not exist');
@@ -127,14 +126,14 @@ export class EmployeeService {
                 surname: updateEmployeeDto.surname,
                 email: updateEmployeeDto.email,
             },
-            { new: true } // Upewnij się, że zwracamy zaktualizowany dokument
+            { new: true }
         ).select('-password');
 
         if (!updatedEmployee) {
             throw new NotFoundException('Employee not found');
         }
 
-        return updatedEmployee.toObject(); // Zamień na czysty obiekt JSON
+        return updatedEmployee.toObject();
     }
 
 }

@@ -1,4 +1,3 @@
-// src/platform-admin/platform-admin.module.ts
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PlatformAdminService } from './platform_admin.service';

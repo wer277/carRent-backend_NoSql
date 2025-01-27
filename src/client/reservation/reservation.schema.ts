@@ -15,7 +15,7 @@ export class Reservation {
     rentalPrice: number;
 
     @Prop({ default: 'active' })
-    reservationStatus: string; // np. active, cancelled, completed
+    reservationStatus: string; 
 
     @Prop({ required: true, type: Types.ObjectId, ref: 'User' })
     clientId: Types.ObjectId;

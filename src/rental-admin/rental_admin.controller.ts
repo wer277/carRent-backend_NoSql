@@ -10,7 +10,7 @@ import { UpdateAdminDto } from './dto/update-admin.dto';
 export class RentalAdminController {
     constructor(private readonly rentalAdminService: RentalAdminService) { }
 
-    @Get('rental_admin_list') // Nowa nazwa endpointu
+    @Get('rental_admin_list') 
     @Roles('platform_admin') // Dostęp tylko dla platform_admin
     async getRentalAdminList() {
         return this.rentalAdminService.findAllRentalAdmins();

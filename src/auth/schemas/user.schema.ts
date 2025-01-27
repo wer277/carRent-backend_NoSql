@@ -42,7 +42,7 @@ export class User {
   isProfileComplete: boolean;
 
   @Prop({ type: [Types.ObjectId], ref: 'RentalCompany', default: [] })
-  rentalCompanyIds: string[]; // Lista ID wypożyczalni zarządzanych przez admina
+  rentalCompanyIds: string[];
 
   @Prop({ default: Date.now })
   createdAt: Date;

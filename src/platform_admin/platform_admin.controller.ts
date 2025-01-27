@@ -1,4 +1,3 @@
-// src/platform-admin/platform-admin.controller.ts
 import { Controller, Get, Put, Body, Req, UseGuards, NotFoundException } from '@nestjs/common';
 import { PlatformAdminService } from './platform_admin.service';
 import { UpdateAdminDto } from '../rental-admin/dto/update-admin.dto';
@@ -7,7 +6,7 @@ import { User } from '../auth/schemas/user.schema';
 import { Roles } from '../auth/roles.decorator';
 
 @Controller('platform_admins')
-@UseGuards(AuthGuard('jwt')) // Zabezpieczenie JWT, dodaj RolesGuard i @Roles jeśli potrzebujesz
+@UseGuards(AuthGuard('jwt')) 
 export class PlatformAdminController {
     constructor(private readonly platformAdminService: PlatformAdminService) { }
 

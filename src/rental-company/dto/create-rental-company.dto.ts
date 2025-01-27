@@ -24,7 +24,7 @@ export class RentalCompanyDto {
     discountPolicy: string;
 
     @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-    createdBy: string; // ID rental admina, który stworzył wypożyczalnię
+    createdBy: string; 
 }
 
 export const RentalCompanySchema = SchemaFactory.createForClass(RentalCompanyDto);

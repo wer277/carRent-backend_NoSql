@@ -31,7 +31,7 @@ export class VehicleService {
         }
 
         Object.assign(vehicle, updateVehicleDto);
-        vehicle.set('updatedAt', new Date());  // Ustawienie pola `updatedAt` poprawnym sposobem
+        vehicle.set('updatedAt', new Date());  
         return vehicle.save();
     }
 

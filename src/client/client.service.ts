@@ -73,7 +73,6 @@ export class ClientService {
         user.street = updateData.street;
         user.houseNumber = updateData.houseNumber;
         user.postalCode = updateData.postalCode;
-        // Ustawiamy flagę profilu kompletnego
         user.isProfileComplete = true;
         return user.save();
     }

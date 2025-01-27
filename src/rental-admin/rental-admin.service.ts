@@ -86,7 +86,7 @@ export class RentalAdminService {
         }
 
         // Usunięcie użytkownika
-        await this.userModel.deleteOne({ _id: id }); // Używamy deleteOne()
+        await this.userModel.deleteOne({ _id: id }); 
     }
 
     async findAllRentalAdmins() {

@@ -10,7 +10,7 @@ export class RolesGuard implements CanActivate {
             context.getHandler(),
             context.getClass(),
         ]);
-        console.log('RolesGuard: Required roles:', roles);  // Logowanie metadanych ról
+        console.log('RolesGuard: Required roles:', roles); 
 
         if (!roles) {
             return true;

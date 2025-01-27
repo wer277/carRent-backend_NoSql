@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, IsArray } from 'class-validator';
 
 export class CreateEmployeeDto {
     @IsEmail()
@@ -17,7 +17,8 @@ export class CreateEmployeeDto {
     @IsNotEmpty()
     surname: string;
 
-    @IsString()
-    @IsNotEmpty()
-    rentalCompanyIds: string[]; // Identyfikator wypożyczalni, do której przypisany jest pracownik
+    @IsArray()
+    @IsString({ each: true })
+    @IsNotEmpty({ each: true })
+    rentalCompanyIds: string[];
 }

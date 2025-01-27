@@ -9,7 +9,7 @@ import { Vehicle, VehicleSchema } from '../../vehicle/schemas/vehicle.schema';
     imports: [
         MongooseModule.forFeature([
             { name: Reservation.name, schema: ReservationSchema },
-            { name: Vehicle.name, schema: VehicleSchema },  // Dla serwisu rezerwacji
+            { name: Vehicle.name, schema: VehicleSchema }, 
         ]),
     ],
     controllers: [ReservationController],

@@ -1,10 +1,9 @@
-// src/platform-admin/platform-admin.service.ts
 import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../auth/schemas/user.schema';
-import { UpdateAdminDto } from '../rental-admin/dto/update-admin.dto'; // Używamy tego samego DTO
+import { UpdateAdminDto } from '../rental-admin/dto/update-admin.dto';
 
 @Injectable()
 export class PlatformAdminService {
